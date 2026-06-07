@@ -4,14 +4,14 @@ A real-time desktop chat and social platform built with Next.js and PocketBase.
 
 ## Features
 
-- 💬 Real-time messaging with typing indicators, read receipts, and reply threads
-- 📸 Media sharing — images, video, audio, documents, and camera capture
-- 🔔 Live notifications for likes and comments
-- 📱 Social feed with posts, likes, comments, replies, and saves
-- 👤 User profiles with stats, saved posts, and notification history
-- 🔒 Block/unblock users, report posts, delete chat history
-- 🎨 Custom chat wallpapers
-- 🖥️ Desktop-only experience
+- Real-time messaging with typing indicators, read receipts, and reply threads
+- Media sharing — images, video, audio, documents, and camera capture
+- Live notifications for likes and comments
+- Social feed with posts, likes, comments, replies, and saves
+- User profiles with stats, saved posts, and notification history
+- Block/unblock users, report posts, delete chat history
+- Custom chat wallpapers
+- Desktop-only experience
 
 ## Tech Stack
 
