@@ -67,6 +67,16 @@ The app requires the following collections in PocketBase:
 | `reports` | post, reporter, reason |
 | `blocks` | blocker, blocked |
 
+## PocketBase Setup
+
+Download and import the schema directly into your PocketBase instance:
+
+1. Go to your PocketBase admin panel → Settings → Import collections
+2. Paste or upload the [`pb_schema.json`](./pb_schema.json) file from this repo
+3. Click Import
+
+This will create all required collections with the correct fields and relations automatically — no manual setup needed.
+
 ## Environment Variables
 
 | Variable | Description |
