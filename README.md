@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Konvo
+
+A real-time desktop chat and social platform built with Next.js and PocketBase.
+
+## Features
+
+- 💬 Real-time messaging with typing indicators, read receipts, and reply threads
+- 📸 Media sharing — images, video, audio, documents, and camera capture
+- 🔔 Live notifications for likes and comments
+- 📱 Social feed with posts, likes, comments, replies, and saves
+- 👤 User profiles with stats, saved posts, and notification history
+- 🔒 Block/unblock users, report posts, delete chat history
+- 🎨 Custom chat wallpapers
+- 🖥️ Desktop-only experience
+
+## Tech Stack
+
+- **Frontend:** Next.js 15, TypeScript, Tailwind CSS
+- **Backend:** PocketBase
+- **UI:** Bootstrap Icons, React Toastify, Emoji Picker React
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+
+- PocketBase (download from [pocketbase.io](https://pocketbase.io))
+
+### Setup
+
+1. Clone the repo:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+   git clone https://github.com/dauntflash/konvo.git
+   cd konvo
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+   npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Start PocketBase:
+```bash
+   ./pocketbase serve --http=0.0.0.0:8090
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Create `.env.local` in the root:
 
-## Learn More
+5. Run the dev server:
+```bash
+   npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+6. Open [http://localhost:3000](http://localhost:3000)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## PocketBase Collections
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The app requires the following collections in PocketBase:
 
-## Deploy on Vercel
+| Collection | Description |
+|---|---|
+| `users` | Auth collection with username, avatar, about, wallpaper, isTyping, typingTo |
+| `posts` | postCaption, postPic, likes, likedBy (relation), savedBy (relation), creator (relation) |
+| `comments` | text, post (relation), user (relation), replyTo, replyToUsername |
+| `messages` | text, file, fileType, fileName, sender, receiver, timestamp, status, replyTo, hiddenFor |
+| `notifications` | recipient, actor, type, post, read |
+| `reports` | post, reporter, reason |
+| `blocks` | blocker, blocked |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Environment Variables
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_PB_URL` | PocketBase server URL |
+
+## License
+
+MIT

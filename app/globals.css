@@ -1,21 +1,302 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@font-face {
+  font-family: oswald;
+  src: url(/public/Oswald-Regular.ttf);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html{
+  font-size: 14px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scrollbar-gutter: stable overlay;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: oswald, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  padding: 5px;
+  background: rgba(17, 25, 40);
+  backdrop-filter: blur(19px) saturate(180%);
+  -webkit-backdrop-filter: blur(19px) saturate(100%);
+  height: 100vh;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+body.dark {
+  background: white;
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(17, 25, 40, 0.66);
+  border-radius: 5px;
+}
+
+.link {
+  animation: loginFade 0.5s forwards;
+}
+
+@keyframes loginFade {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px);
+    visibility: hidden;
+  }
+}
+.header {
+  animation: headerAnimation 0.5s forwards;
+}
+@keyframes headerAnimation {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-30px);
+    visibility: hidden;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.appear {
+  animation: fadeIn 1s forwards;
+}
+.inputDiv {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 1rem;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inputStyle {
+  background: transparent;
+  outline: none;
+  padding: 0.5rem 1rem;
+  font-size: 20px;
+  font-weight: 200;
+  color: white;
+  width: 100%;
+}
+.btnStyle {
+  background: rgba(81, 130, 254, 0.36);
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  margin: 1.5rem 0;
+  width: 100%;
+  text-align: center;
+}
+
+.sidePanel {
+  background: rgba(81, 130, 254, 0.36);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4rem 5rem;
+  text-align: center;
+}
+
+.toggleBtn {
+  border: 2px solid white;
+  border-radius: 1.5rem;
+  padding: 0.5rem 1.5rem;
+  transition: all 0.3s;
+}
+
+.toggleBtn:hover {
+  background: white;
+  color: #5182fe;
+}
+
+.Toastify__toast--success {
+  background: rgba(81, 130, 254, 0.36) !important;
+  backdrop-filter: blur(19px);
+}
+
+.Toastify__toast--error {
+  background: rgba(220, 38, 38, 0.36) !important;
+  backdrop-filter: blur(19px);
+}
+
+.Toastify__toast--loading {
+  background: rgba(81, 130, 254, 0.36) !important;
+  backdrop-filter: blur(19px);
+}
+
+.Toastify__progress-bar--success {
+  background: #5182fe !important;
+}
+
+.Toastify__progress-bar--error {
+  background: rgb(220, 38, 38) !important;
+}
+
+.Toastify__progress-bar--loading {
+  background: #5182fe !important;
+}
+:root {
+  --light-bg: #f8fafc;
+  --light-primary: #2563eb;
+  --light-secondary: #e2e8f0;
+  --light-accent: #3b82f6;
+  --light-text: #1e293b;
+  --light-border: #e2e8f0;
+  --light-hover: #f1f5f9;
+  --light-message-sent: #2563eb;
+  --light-message-received: #f1f5f9;
+}
+
+.loader-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.nav-transition {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.nav-transition-enter {
+  opacity: 0;
+}
+
+.nav-transition-enter-active {
+  opacity: 1;
+}
+
+.nav-transition-exit {
+  opacity: 1;
+}
+
+.nav-transition-exit-active {
+  opacity: 0;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+/* Message bubble styles */
+.message-bubble-sent {
+  border-radius: 8px 8px 0 8px;
+}
+.message-bubble-received {
+  border-radius: 8px 8px 8px 0;
+}
+a {
+  color: #60a5fa;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: #93c5fd;
+}
+
+.message-bubble-sent a {
+  color: #e0e7ff;
+}
+
+.message-bubble-sent a:hover {
+  color: #ffffff;
 }
