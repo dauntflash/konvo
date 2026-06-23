@@ -285,6 +285,7 @@ function Chat({ setInfo, activeUser }: Props) {
   };
 
   const handleSend = async () => {
+    
     try {
       if (!user?.id) {
         console.error("No authenticated user found");
@@ -364,6 +365,7 @@ function Chat({ setInfo, activeUser }: Props) {
         setMessage("");
         setShowFile(false);
         setReplyingTo(null);
+        localStorage.removeItem(`draft_${activeUser.id}`)
 
         if (textareaRef.current) {
           textareaRef.current.style.height = "auto";
