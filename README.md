@@ -2,6 +2,8 @@
 
 > A real-time desktop chat and social platform — built with Next.js 15 and PocketBase.
 
+ [Live Demo](https://konvo-opal.vercel.app) — log in with `demo@konvo.app` / `demo1234`
+
 Konvo brings together private messaging and a public social feed in one sleek, desktop-first experience. Chat with friends in real time, share media, react to posts, and stay connected — all with zero backend complexity thanks to PocketBase.
 
 ---
