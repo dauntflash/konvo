@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/useAuth";
 import Loader from "./components/loader/loader";
 import WelcomePage from "./components/welcomePage/welcomePage";
 import { usePathname } from "next/navigation";
+
 type activeUserInfo = {
   id: string;
   username: string;

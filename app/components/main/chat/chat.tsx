@@ -45,6 +45,7 @@ function Chat({ setInfo, activeUser }: Props) {
   const [isChatVisible, setIsChatVisible] = useState(true);
   const unsubscribeRef = useRef<(() => void) | null>(null);
   const [blocked, setBlocked] = useState<false | "you" | "them" | "both">(false);
+  const messageRef = useRef(message);
 
   const playSound = useSound("/send.wav", 1, "send_sound");
   const markMessagesAsSeen = async () => {
@@ -252,8 +253,8 @@ function Chat({ setInfo, activeUser }: Props) {
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
       }
-      if (message.trim()) {
-        localStorage.setItem(`draft_${activeUser.id}`, message);
+      if (messageRef.current.trim()) {
+        localStorage.setItem(`draft_${activeUser.id}`, messageRef.current);
       } else {
         localStorage.removeItem(`draft_${activeUser.id}`);
       }
@@ -263,7 +264,6 @@ function Chat({ setInfo, activeUser }: Props) {
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setMessage(value);
-    localStorage.setItem(`draft_${activeUser.id}`, value);
     if (!isTypingRef.current && value.length > 0) {
       isTypingRef.current = true;
       updateTypingStatus(true);
@@ -626,11 +626,15 @@ function Chat({ setInfo, activeUser }: Props) {
       }
     }
   };
+  useEffect(() => {
+    messageRef.current = message;
+  }, [message]);
+
   const wallpaperUrl = user?.wallpaper ? pb.files.getURL(user, user.wallpaper) : null;
 
   return (
     <section
-      className="flex-[2] border-[rgba(255,255,255,0.3)] border-r-[1px] flex flex-col"
+      className="flex-[2] border-[rgba(255,255,255,0.3)] border-r-[1px] flex flex-col h-screen overflow-hidden"
       style={{
         backgroundImage: wallpaperUrl ? `url(${wallpaperUrl})` : "none",
         backgroundSize: "cover",
@@ -643,7 +647,7 @@ function Chat({ setInfo, activeUser }: Props) {
         <Header setInfo={setInfo} activeUser={activeUser} />
       </div>
 
-      <div className="flex-1 overflow-auto messages-container">
+      <div className="flex-1 overflow-auto messages-container min-h-0">
         <Message
           activeUser={activeUser}
           replyingTo={replyingTo || ""}
