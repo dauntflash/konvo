@@ -860,7 +860,7 @@ function Chat({ setInfo, activeUser }: Props) {
               } box-border outline-none bg-[rgba(17,25,40,0.66)] py-3 rounded-lg flex-1 px-4 max-h-[150px] overflow-y-auto resize-none text-sm transition-height duration-200 border-[2px] border-[rgba(255,255,255,0.1)] w-full`}
             rows={1}
             onKeyDown={(e) => {
-              if (e.key === "Eevnter" && !e.shiftKey) {
+              if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
                 handleSend();
               }
