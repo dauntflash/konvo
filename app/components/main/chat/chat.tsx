@@ -252,6 +252,11 @@ function Chat({ setInfo, activeUser }: Props) {
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
       }
+      if (message.trim()) {
+        localStorage.setItem(`draft_${activeUser.id}`, message);
+      } else {
+        localStorage.removeItem(`draft_${activeUser.id}`);
+      }
     };
   }, [activeUser?.id]);
 
