@@ -1,88 +1,167 @@
-# Konvo
+# Konvo 
 
-A real-time desktop chat and social platform built with Next.js and PocketBase.
+> A real-time desktop chat and social platform — built with Next.js 15 and PocketBase.
 
-## Features
+Konvo brings together private messaging and a public social feed in one sleek, desktop-first experience. Chat with friends in real time, share media, react to posts, and stay connected — all with zero backend complexity thanks to PocketBase.
 
-- Real-time messaging with typing indicators, read receipts, and reply threads
-- Media sharing — images, video, audio, documents, and camera capture
+---
+
+##  Features
+
+###  Messaging
+- Real-time chat with instant message delivery
+- Typing indicators so you know when someone's responding
+- Read receipts (sent / delivered / seen)
+- Reply threads — quote any message to keep context
+- Share images, videos, audio, documents, and even capture from your camera
+- Custom chat wallpapers per conversation
+- Delete chat history for yourself
+
+### Social Feed
+- Post with captions and images
+- Like, comment, reply to comments, and save posts
 - Live notifications for likes and comments
-- Social feed with posts, likes, comments, replies, and saves
-- User profiles with stats, saved posts, and notification history
-- Block/unblock users, report posts, delete chat history
-- Custom chat wallpapers
-- Desktop-only experience
+- Report inappropriate posts
 
-## Tech Stack
+### Profiles
+- User profiles with stats (posts, followers, etc.)
+- View saved posts and notification history
+- Block / unblock users
 
-- **Frontend:** Next.js 15, TypeScript, Tailwind CSS
-- **Backend:** PocketBase
-- **UI:** Bootstrap Icons, React Toastify, Emoji Picker React
+---
 
-## Getting Started
+##  Tech Stack
+
+| Layer      | Technology                                      |
+|------------|-------------------------------------------------|
+| Framework  | [Next.js 15](https://nextjs.org/) + TypeScript  |
+| Backend    | [PocketBase](https://pocketbase.io/)            |
+| Styling    | Tailwind CSS                                    |
+| Icons      | Bootstrap Icons                                 |
+| UI Extras  | React Toastify, Emoji Picker React, React Select |
+
+---
+
+##  Getting Started
 
 ### Prerequisites
 
-- Node.js 18+
-- PocketBase (download from [pocketbase.io](https://pocketbase.io))
+- **Node.js** v18 or higher
+- **PocketBase** — [download here](https://pocketbase.io/docs/)
 
-### Setup
+### 1. Clone the repo
 
-1. Clone the repo:
 ```bash
-   git clone https://github.com/dauntflash/konvo.git
-   cd konvo
+git clone https://github.com/dauntflash/konvo.git
+cd konvo
 ```
 
-2. Install dependencies:
+### 2. Install dependencies
+
 ```bash
-   npm install
+npm install
 ```
 
-3. Start PocketBase:
+### 3. Set up PocketBase
+
+Download the PocketBase binary for your OS from [pocketbase.io](https://pocketbase.io/docs/), place it in the project root (or anywhere you prefer), then run:
+
 ```bash
-   ./pocketbase serve --http=0.0.0.0:8090
+./pocketbase serve --http=0.0.0.0:8090
 ```
 
-4. Create `.env.local` in the root:
+Then import the schema:
 
-5. Run the dev server:
-```bash
-   npm run dev
+1. Open your PocketBase admin panel at `http://localhost:8090/_/`
+2. Go to **Settings → Import collections**
+3. Upload or paste the contents of [`pb_schema.json`](./pb_schema.json)
+4. Click **Import** — all collections are created automatically 
+
+### 4. Configure environment variables
+
+Create a `.env.local` file in the project root:
+
+```env
+NEXT_PUBLIC_PB_URL=http://localhost:8090
 ```
 
-6. Open [http://localhost:3000](http://localhost:3000)
+> If you're deploying PocketBase to a remote server, replace `localhost:8090` with your server's URL.
 
-## PocketBase Collections
+### 5. Start the dev server
 
-The app requires the following collections in PocketBase:
+```bash
+npm run dev
+```
 
-| Collection | Description |
-|---|---|
-| `users` | Auth collection with username, avatar, about, wallpaper, isTyping, typingTo |
-| `posts` | postCaption, postPic, likes, likedBy (relation), savedBy (relation), creator (relation) |
-| `comments` | text, post (relation), user (relation), replyTo, replyToUsername |
-| `messages` | text, file, fileType, fileName, sender, receiver, timestamp, status, replyTo, hiddenFor |
-| `notifications` | recipient, actor, type, post, read |
-| `reports` | post, reporter, reason |
-| `blocks` | blocker, blocked |
+Open [http://localhost:3000](http://localhost:3000) — you're live! 🎉
 
-## PocketBase Setup
+---
 
-Download and import the schema directly into your PocketBase instance:
+##  Database Schema
 
-1. Go to your PocketBase admin panel → Settings → Import collections
-2. Paste or upload the [`pb_schema.json`](./pb_schema.json) file from this repo
-3. Click Import
+Konvo uses the following PocketBase collections. You don't need to create these manually — just import `pb_schema.json`.
 
-This will create all required collections with the correct fields and relations automatically — no manual setup needed.
+| Collection      | Purpose                                                                 |
+|-----------------|-------------------------------------------------------------------------|
+| `users`         | Auth collection — stores username, avatar, about, wallpaper, typing status |
+| `posts`         | Social feed posts with captions, images, likes, and saves               |
+| `comments`      | Comments and threaded replies on posts                                  |
+| `messages`      | Private messages with file support, read status, and reply references   |
+| `notifications` | Real-time alerts for likes, comments, and other activity                |
+| `reports`       | User-submitted post reports                                             |
+| `blocks`        | Block relationships between users                                       |
 
-## Environment Variables
+---
 
-| Variable | Description |
-|---|---|
-| `NEXT_PUBLIC_PB_URL` | PocketBase server URL |
+##  Project Structure
 
-## License
+```
+konvo/
+├── app/               # Next.js app router — pages and layouts
+├── lib/               # Utility functions, PocketBase client, helpers
+├── public/
+│   └── bgImages/      # Bundled chat wallpaper options
+├── pb_schema.json     # PocketBase collection schema (import this!)
+├── .env.local         # Your environment variables (create this)
+└── ...config files
+```
 
-MIT
+---
+
+##  Deployment
+
+### Frontend (Next.js)
+
+Deploy to [Vercel](https://vercel.com/) in one click:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/dauntflash/konvo)
+
+Set `NEXT_PUBLIC_PB_URL` to your hosted PocketBase URL in the Vercel environment settings.
+
+### Backend (PocketBase)
+
+PocketBase is a single binary — you can host it on any VPS (DigitalOcean, Railway, Fly.io, etc.). See the [PocketBase deployment docs](https://pocketbase.io/docs/going-to-production/) for guides.
+
+---
+
+##  Contributing
+
+Contributions, bug reports, and feature requests are welcome! Here's how to get involved:
+
+1. Fork the repo
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Open a Pull Request
+
+Please open an issue first to discuss any significant changes.
+
+---
+
+##  License
+
+MIT — see [LICENSE](./LICENSE) for details.
+
+---
+
+> **Note:** Konvo is currently a desktop-only experience. Mobile support may be added in future releases.

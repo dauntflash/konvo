@@ -95,7 +95,6 @@ function Header({ setInfo, activeUser }: HeaderProps) {
         console.error("Failed to subscribe to user typing status:", error);
       });
 
-    // Fetch initial typing status from the user record
     pb.collection("users")
       .getOne(activeUser.id)
       .then((record) => {
