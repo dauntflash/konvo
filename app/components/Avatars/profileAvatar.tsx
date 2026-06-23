@@ -15,18 +15,18 @@ function ProfileAvatar({ avatarUser }: avatarProp) {
     <div className="">
       {newAvatar ? (
         <div className="w-[8rem] h-[8rem] rounded-full bg-[rgba(17,25,40,0.55)] flex items-center justify-center">
-          <Image
-            src={newAvatar}
+          <img
+            src={newAvatar || ""}
             alt="avatar"
-            width={100}
-            height={100}
             className=""
             style={{
               width: "100%",
               height: "100%",
               borderRadius: "50%",
               objectFit: "cover",
-            }}></Image>
+            }}
+          />
+          
         </div>
       ) : (
         <div className="w-[8rem] h-[8rem] rounded-full bg-[#5182fe] flex items-center justify-center text-[6rem] text-center  size-full object-cover">

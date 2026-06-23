@@ -8,27 +8,27 @@ type avatarProp = {
   size: string;
 };
 function OwnAvatar({ avatarUser, size }: avatarProp) {
-  const avatarUrl =pb.files.getURL(avatarUser, avatarUser.avatar)
-  const userNameLetter= avatarUser.username[0].toUpperCase()
-    const sizeStyle = size ? { width: size, height: size } : { width: "3rem", height: "3rem" };
+  const avatarUrl = pb.files.getURL(avatarUser, avatarUser.avatar)
+  const userNameLetter = avatarUser.username[0].toUpperCase()
+  const sizeStyle = size ? { width: size, height: size } : { width: "3rem", height: "3rem" };
 
   return (
     <div className="">
       {avatarUrl ? (
         <div className={`w-[${size}] h-[${size}] rounded-full  flex items-center justify-center`}>
-            
-          <Image
+
+          <img
             src={avatarUrl}
             alt="avatar"
-            width={100}
-            height={100}
             className=""
             style={{
               width: "100%",
               height: "100%",
               borderRadius: "50%",
               objectFit: "cover",
-            }}></Image>
+            }}
+          />
+          
         </div>
       ) : (
         <div className={`w-[${size}] h-[${size}] bg-[rgba(81,130,254,0.16)] text-[#5182fe] text-[2rem] flex items-center text-center justify-center rounded-[50%] object-cover`}

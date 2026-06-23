@@ -243,6 +243,8 @@ function Chat({ setInfo, activeUser }: Props) {
     }
   };
   useEffect(() => {
+    const saved = localStorage.getItem(`draft_${activeUser.id}`);
+    setMessage(saved || "");
     return () => {
       if (isTypingRef.current) {
         updateTypingStatus(false);
@@ -252,10 +254,11 @@ function Chat({ setInfo, activeUser }: Props) {
       }
     };
   }, [activeUser?.id]);
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setMessage(value);
-
+    localStorage.setItem(`draft_${activeUser.id}`, value);
     if (!isTypingRef.current && value.length > 0) {
       isTypingRef.current = true;
       updateTypingStatus(true);
@@ -316,6 +319,7 @@ function Chat({ setInfo, activeUser }: Props) {
           console.log("Message sent with ID:", record.id);
 
           setMessage("");
+          localStorage.removeItem(`draft_${activeUser.id}`);
           setShowFile(false);
           setFileURL("");
           setAudioURL(null);
@@ -629,9 +633,8 @@ function Chat({ setInfo, activeUser }: Props) {
         backgroundRepeat: "no-repeat",
       }}>
       <div
-        className={`bg-opacity-50 ${
-          wallpaperUrl ? "bg-[rgba(17,25,40,0.55)] backdrop-blur-[9px] saturate-[180%]" : ""
-        }`}>
+        className={`bg-opacity-50 ${wallpaperUrl ? "bg-[rgba(17,25,40,0.55)] backdrop-blur-[9px] saturate-[180%]" : ""
+          }`}>
         <Header setInfo={setInfo} activeUser={activeUser} />
       </div>
 
@@ -681,9 +684,8 @@ function Chat({ setInfo, activeUser }: Props) {
       </div>
 
       <div
-        className={` ${
-          blocked ? "hidden" : ""
-        } relative flex items-end py-1 border-t-[1px] border-[rgba(255,255,255,0.3)]`}>
+        className={` ${blocked ? "hidden" : ""
+          } relative flex items-end py-1 border-t-[1px] border-[rgba(255,255,255,0.3)]`}>
         <div className="flex px-5 gap-4 *:hover:cursor-pointer my-5 justify-center items-center relative">
           <div
             className={`${isRecording || showFile ? "hidden" : ""} bi bi-paperclip`}
@@ -752,9 +754,8 @@ function Chat({ setInfo, activeUser }: Props) {
 
           <div className="flex items-center gap-2">
             <div
-              className={`${showFile ? "hidden" : ""} bi bi-mic-fill ${
-                isRecording ? "text-[#5183fe]" : ""
-              } cursor-pointer`}
+              className={`${showFile ? "hidden" : ""} bi bi-mic-fill ${isRecording ? "text-[#5183fe]" : ""
+                } cursor-pointer`}
               onClick={() => {
                 if (isRecording) {
                   stopRecording();
@@ -844,9 +845,8 @@ function Chat({ setInfo, activeUser }: Props) {
               autoResize(e);
             }}
             onPaste={handlePaste}
-            className={`${
-              isRecording ? "hidden" : ""
-            } box-border outline-none bg-[rgba(17,25,40,0.66)] py-3 rounded-lg flex-1 px-4 max-h-[150px] overflow-y-auto resize-none text-sm transition-height duration-200 border-[2px] border-[rgba(255,255,255,0.1)] w-full`}
+            className={`${isRecording ? "hidden" : ""
+              } box-border outline-none bg-[rgba(17,25,40,0.66)] py-3 rounded-lg flex-1 px-4 max-h-[150px] overflow-y-auto resize-none text-sm transition-height duration-200 border-[2px] border-[rgba(255,255,255,0.1)] w-full`}
             rows={1}
             onKeyDown={(e) => {
               if (e.key === "Eevnter" && !e.shiftKey) {
@@ -854,7 +854,7 @@ function Chat({ setInfo, activeUser }: Props) {
                 handleSend();
               }
             }}
-          
+
             placeholder="Type a message..."
             value={message}
           />
@@ -862,9 +862,8 @@ function Chat({ setInfo, activeUser }: Props) {
 
         <div className="flex px-5 gap-4 items-center my-3">
           <div
-            className={`${
-              isRecording ? "hidden" : ""
-            } bi bi-emoji-wink-fill text-xl hover:cursor-pointer`}
+            className={`${isRecording ? "hidden" : ""
+              } bi bi-emoji-wink-fill text-xl hover:cursor-pointer`}
             onClick={() => setShowEmoji((prev) => !prev)}
           />
           {showEmoji && (

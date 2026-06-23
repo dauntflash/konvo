@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import pb from "@/lib/pocketbase";
 import { RecordModel } from "pocketbase";
 import { useAuth } from "@/lib/useAuth";
@@ -35,7 +35,7 @@ function Chatlist({ activeUser, setActiveUser }: Props) {
   const [isLoading, setIsLoading] = useState(true);
   const showOnlineContacts = user?.showOnlineContacts;
   const [blockedUsers, setBlockedUsers] = useState<Set<string>>(new Set());
-const playSound = useSound("/receive.wav",1, "notification_sound");
+  const playSound = useSound("/receive.wav", 1, "notification_sound");
   const fetchBlockedUsers = async () => {
     if (!user?.id) return;
     try {
@@ -151,6 +151,9 @@ const playSound = useSound("/receive.wav",1, "notification_sound");
   };
 
   const getLatestMessage = (contactId: string): string => {
+    const draft = typeof window !== "undefined" ? localStorage.getItem(`draft_${contactId}`) : null;
+    if (draft) return `Draft: ${draft}`;
+
     const message = latestMessages[contactId];
     if (!message) return "No messages";
     if (message.file) {
@@ -159,7 +162,6 @@ const playSound = useSound("/receive.wav",1, "notification_sound");
       }
       return message.text ? `📎 ${message.text}` : "📎 Attachment";
     }
-
     if (message.sender === user?.id) {
       return `You: ${message.text || "No message content"}`;
     }
@@ -469,6 +471,8 @@ const playSound = useSound("/receive.wav",1, "notification_sound");
     loadContacts();
   }, [user?.id]);
 
+  const savedDraft = localStorage.getItem(`draft_${activeUser.id}`);
+
   return (
     <section className="flex-1 mt-2 overflow-y-auto h-[100%] scrollbar-overlay w-auto overflow-x-hidden">
       {isLoading ? (
@@ -538,10 +542,10 @@ const playSound = useSound("/receive.wav",1, "notification_sound");
                     return isToday
                       ? messageDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
                       : messageDate.toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                        });
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      });
                   })();
                   return (
                     <div
@@ -550,11 +554,10 @@ const playSound = useSound("/receive.wav",1, "notification_sound");
                         setIsActiveId(contact.id);
                         handleActiveUser(contact);
                       }}
-                      className={`${
-                        isActiveId === contact.id
+                      className={`${isActiveId === contact.id
                           ? "bg-[rgba(255,255,255,0.2)] dark:bg-gray-300 bg-opacity-65"
                           : "hover:bg-[rgba(255,255,255,0.1)]"
-                      } flex p-3 items-center px-8 gap-4 border-b-[1px] border-[rgba(255,255,255,0.1)] cursor-pointer relative w-auto`}>
+                        } flex p-3 items-center px-8 gap-4 border-b-[1px] border-[rgba(255,255,255,0.1)] cursor-pointer relative w-auto`}>
                       <UserAvatar avatarUser={contact} />
                       {contact.is_online && !isBlocked(contact.id) && (
                         <div className="h-3 w-3 rounded-[50%] bg-[#5182fe] absolute top-5 left-[4.5rem]"></div>
@@ -570,9 +573,8 @@ const playSound = useSound("/receive.wav",1, "notification_sound");
                         </div>
                         <div className="flex justify-between items-center relative mr-9">
                           <span
-                            className={`${
-                              unreadCount > 0 ? "" : "text-gray-400"
-                            } flex-shrink-0  w-[100%] truncate`}>
+                            className={`${unreadCount > 0 ? "" : "text-gray-400"
+                              } flex-shrink-0  w-[100%] truncate`}>
                             {latestMessage}
                           </span>
                           <div className="flex-shrink-0">
@@ -655,11 +657,10 @@ const playSound = useSound("/receive.wav",1, "notification_sound");
                       setIsActiveId(contact.id);
                       handleActiveUser(contact);
                     }}
-                    className={`${
-                      isActiveId === contact.id
+                    className={`${isActiveId === contact.id
                         ? "bg-[rgba(255,255,255,0.2)] dark:bg-gray-300 bg-opacity-65"
                         : "hover:bg-[rgba(255,255,255,0.1)]"
-                    } flex p-3 items-center px-8 gap-4 border-b-[1px] border-[rgba(255,255,255,0.1)] cursor-pointer relative w-auto`}>
+                      } flex p-3 items-center px-8 gap-4 border-b-[1px] border-[rgba(255,255,255,0.1)] cursor-pointer relative w-auto`}>
                     <UserAvatar avatarUser={contact} />
                     {contact.is_online && !isBlocked(contact.id) && (
                       <div className="h-3 w-3 rounded-[50%] bg-[#5182fe] absolute top-5 left-[4.5rem]"></div>
@@ -675,9 +676,8 @@ const playSound = useSound("/receive.wav",1, "notification_sound");
                       </div>
                       <div className="flex justify-between items-center relative mr-9">
                         <span
-                          className={`${
-                            unreadCount > 0 ? "" : "text-gray-400"
-                          } flex-shrink-0  w-[100%] truncate`}>
+                          className={`${unreadCount > 0 ? "" : "text-gray-400"
+                            } flex-shrink-0  w-[100%] truncate`}>
                           {latestMessage}
                         </span>
                         <div className="flex-shrink-0">

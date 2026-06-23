@@ -1,5 +1,4 @@
 import pb from "@/lib/pocketbase";
-import Image from "next/image";
 import React from "react";
 
 type avatarProp = {
@@ -12,11 +11,10 @@ function OwnAvatar({ avatarUser }: avatarProp) {
   return (
     <div className="relative w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-[rgba(81,130,254,0.16)]">
       {avatarUrl ? (
-        <Image
+        <img
           src={avatarUrl}
           alt="avatar"
-          fill
-          className="object-cover"
+          className="object-cover w-full h-full"
         />
       ) : (
         <span className="text-[#5182fe] text-[2rem]">{userNameLetter ? userNameLetter : ""}</span>

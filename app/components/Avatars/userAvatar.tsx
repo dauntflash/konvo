@@ -17,11 +17,9 @@ function UserAvatar({ avatarUser }: avatarProp) {
     <div className="">
       {newAvatar ? (
         <div className="w-12 h-12 rounded-full bg-[rgba(17,25,40,0.55)] flex items-center justify-center">
-          <Image
-            src={newAvatar}
+          <img
+            src={newAvatar || ""}
             alt="avatar"
-            width={100}
-            height={100}
             className=""
             style={{
               width: "100%",
