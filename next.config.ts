@@ -27,9 +27,9 @@ const nextConfig: NextConfig & {
         hostname: "192.168.100.35",
         port: "8090",
       },
-      {
-        protocol: 'https',
-        hostname: 'sbhydtynjcvx.eu-central-1.clawcloudrun.com',
+        {
+        protocol: "https",
+        hostname: "pocketbase-production-b489.up.railway.app",
       },
     ],
   },
