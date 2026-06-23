@@ -15,7 +15,7 @@
     "clsx": "^2.1.1",
     "emoji-picker-react": "^4.12.2",
     "idb": "^8.0.3",
-    "next": "15.1.6",
+    "next": "^16.2.9",
     "pocketbase": "^0.26.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
