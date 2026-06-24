@@ -165,7 +165,6 @@ function Posts() {
           };
         });
 
-      // Derive liked/saved from the post data directly — no separate query needed
       setLikedPosts(formattedPosts.filter(p => p.likedBy.includes(user.id)).map(p => p.id));
       setSavedPosts(formattedPosts.filter(p => p.savedBy.includes(user.id)).map(p => p.id));
       setPosts(formattedPosts);
@@ -182,11 +181,9 @@ function Posts() {
     if (!user) return;
 
     pb.collection("posts").subscribe("*", (e) => {
-      // Only refetch for creates/deletes, not updates (updates = likes/saves triggering noise)
       if (e.action === "create" || e.action === "delete") {
         fetchPosts(false);
       } else {
-        // For updates, just patch the specific post's non-save data
         setPosts(prev => prev.map(p => {
           if (p.id !== e.record.id) return p;
           return {
@@ -499,7 +496,7 @@ function Posts() {
               </div>
             ) : post.postCaption ? (
               <div className="px-4 py-5 border-y border-[rgba(255,255,255,0.07)]">
-                <p className="text-sm leading-relaxed">{post.postCaption}</p>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap">{post.postCaption}</p>
               </div>
             ) : null}
 
