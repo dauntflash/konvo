@@ -146,7 +146,7 @@ function SideBar() {
           <Loader size="medium" />
         </div>
       )}
-      <section className="h-full border-[rgba(255,255,255,0.1)] border-r-[2px]\">
+      <section className="h-full border-[rgba(255,255,255,0.1)] border-r-[2px]">
         {isAuthenticated && user?.hasSeenWelcome === true ? (
           <div className="h-full">
             <div className="flex flex-col gap-2 sm:gap-4 justify-center items-center rounded-sm p-1 sm:p-2">

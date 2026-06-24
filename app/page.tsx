@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/useAuth";
 import Loader from "./components/loader/loader";
 import WelcomePage from "./components/welcomePage/welcomePage";
 import { usePathname } from "next/navigation";
+import pb from "@/lib/pocketbase";
 
 type activeUserInfo = {
   id: string;
@@ -33,12 +34,52 @@ function Page() {
     setIsLoading(false);
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const heartbeat = async (isOnline: boolean) => {
+      try {
+        await pb.collection("users").update(user.id, {
+          is_online: isOnline,
+          last_seen: new Date().toISOString(),
+        });
+      } catch (error) {
+        console.error("Heartbeat failed:", error);
+      }
+    };
+
+    heartbeat(true);
+    const interval = setInterval(() => heartbeat(true), 25000);
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        heartbeat(false);
+      } else {
+        heartbeat(true);
+      }
+    };
+
+    const handleOffline = () => {
+      pb.collection("users").update(user.id, { is_online: false });
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("beforeunload", handleOffline);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("beforeunload", handleOffline);
+      handleOffline();
+    };
+  }, [user?.id]);
+
   if (isLoading) {
     return <Loader />;
   }
 
   return (
-    <section className="flex flex-col md:flex-row h-full w-full roundedme-sm">
+    <section className="flex flex-col md:flex-row h-full w-full rounded-sm">
       {isAuthenticated ? (
         user?.hasSeenWelcome ? (
           <>
