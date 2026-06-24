@@ -397,6 +397,27 @@ function Posts() {
   if (loading) return <div className="h-full flex items-center justify-center text-white">Loading posts...</div>;
   if (error) return <div className="h-full flex items-center justify-center text-red-400">{error}</div>;
 
+
+  const parseLinks = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+
+    return parts.map((part, index) => {
+      if (urlRegex.test(part)) {
+        return (
+          <a
+            key={index}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-400 hover:text-blue-300 underline break-all">
+            {part}
+          </a>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
   return (
     <div className="h-full text-white overflow-auto">
       <ToastContainer />
@@ -496,7 +517,7 @@ function Posts() {
               </div>
             ) : post.postCaption ? (
               <div className="px-4 py-5 border-y border-[rgba(255,255,255,0.07)]">
-                <p className="text-sm leading-relaxed whitespace-pre-wrap">{post.postCaption}</p>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap">{parseLinks(post.postCaption)}</p>
               </div>
             ) : null}
 
