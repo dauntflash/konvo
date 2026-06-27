@@ -63,7 +63,7 @@ function Chat({ setInfo, activeUser }: Props) {
 
       if (updatePromises.length > 0) {
         await Promise.all(updatePromises);
-        console.log(`Marked ${updatePromises.length} messages as seen`);
+         
       }
     } catch (error) {
       console.error("Error marking messages as seen:", error);
@@ -171,7 +171,7 @@ function Chat({ setInfo, activeUser }: Props) {
           }
 
           if (e.action === "update") {
-            console.log("Message updated:", e.record.id);
+             
           }
         });
 
@@ -322,7 +322,7 @@ function Chat({ setInfo, activeUser }: Props) {
           const record = await pb
             .collection("messages")
             .create(formData, { expand: "replyTo.sender" });
-          console.log("Message sent with ID:", record.id);
+           
 
           setMessage("");
           localStorage.removeItem(`draft_${activeUser.id}`);
@@ -386,7 +386,7 @@ function Chat({ setInfo, activeUser }: Props) {
       const userRecord = await pb.collection("users").getOne(user!.id);
 
       if (userRecord.isTyping === true && userRecord.typingTo === activeUser.id) {
-        console.log("Typing status not cleared, forcing update...");
+         
         await pb.collection("users").update(user!.id, {
           isTyping: false,
           typingTo: null,

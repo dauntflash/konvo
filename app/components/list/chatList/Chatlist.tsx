@@ -81,7 +81,7 @@ function Chatlist({ activeUser, setActiveUser }: Props) {
       );
 
       setContacts(uniqueContacts);
-      console.log("Contacts fetched:", uniqueContacts.length);
+       
     } catch (error) {
       console.error("Failed to fetch contacts:", error);
     }
@@ -121,7 +121,7 @@ function Chatlist({ activeUser, setActiveUser }: Props) {
               owner: user.id,
               contact: senderId,
             });
-            console.log(`Auto-added contact: ${senderId}`);
+             
             newContactsAdded = true;
           } catch (error) {
             console.error(`Failed to add contact ${senderId}:`, error);
@@ -182,7 +182,7 @@ function Chatlist({ activeUser, setActiveUser }: Props) {
       try {
         unsubscribeContacts = await pb.collection("contacts").subscribe("*", (e) => {
           if (e.record.owner === user?.id) {
-            console.log("Contacts event:", e.action, e.record);
+             
             fetchContacts();
           }
         });
@@ -312,7 +312,7 @@ function Chatlist({ activeUser, setActiveUser }: Props) {
               return prev;
             });
           } else if (e.action === "delete") {
-            console.log("Message deleted:", message.id);
+             
 
             setUnreadMessages((prev) => prev.filter((msg) => msg.id !== message.id));
 
@@ -367,22 +367,22 @@ function Chatlist({ activeUser, setActiveUser }: Props) {
       if (unsubscribeUsers) unsubscribeUsers();
       if (unsubscribeMessages) unsubscribeMessages();
       if (unsubscribeBlocks) unsubscribeBlocks();
-      console.log("Unsubscribed from all collections");
+       
     };
   }, [user]);
 
   useEffect(() => {
-    console.log("Active user changed:", activeUser);
+     
     if (activeUser?.id) {
       setIsActiveId(activeUser.id);
     }
 
     let unsubscribeActiveUser: (() => void) | undefined;
     if (activeUser?.id) {
-      console.log("Subscribing to active user:", activeUser.id);
+       
       pb.collection("users")
         .subscribe(activeUser.id, ({ record }) => {
-          console.log("Active user update:", record);
+           
           handleActiveUser({
             id: record.id,
             username: record.username as string,
@@ -403,14 +403,14 @@ function Chatlist({ activeUser, setActiveUser }: Props) {
     }
     return () => {
       if (unsubscribeActiveUser) {
-        console.log("Unsubscribing from active user:", activeUser?.id);
+         
         unsubscribeActiveUser();
       }
     };
   }, [activeUser?.id]);
 
   const handleActiveUser = (contact: RecordModel) => {
-    console.log("Setting active user:", contact);
+     
     setActiveUser(contact);
   };
 
@@ -422,11 +422,11 @@ function Chatlist({ activeUser, setActiveUser }: Props) {
   }, [unreadMessages.length]);
 
   useEffect(() => {
-    console.log("Unread messages updated:", unreadMessages.length);
+     
     contacts.forEach((contact) => {
       const count = getUnreadCount(contact.id);
       if (count > 0) {
-        console.log(`${contact.username} has ${count} unread messages`);
+         
       }
     });
   }, [unreadMessages, contacts]);

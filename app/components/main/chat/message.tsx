@@ -232,7 +232,7 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
         is_online: false,
         last_seen: new Date().toISOString(),
       });
-      console.log("User marked as offline");
+       
     } catch (error) {
       console.error("Failed to update offline status:", error);
     }
@@ -289,7 +289,7 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
       .subscribe("*", async (e) => {
         // When any user comes online, check if they have sent messages that should be marked as delivered
         if (e.action === "update" && e.record.is_online === true) {
-          console.log(`User ${e.record.id} came online`);
+           
 
           // Find sent messages from this user to current user
           const sentMessages = await pb.collection("messages").getFullList({

@@ -17,7 +17,7 @@ function AddUser({ setAdd }: headerProp) {
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState<RecordModel[]>([]);
 
-  console.log("here are the added users", addedUsers);
+   
 
   useEffect(() => {
     if (!user?.id) return;
