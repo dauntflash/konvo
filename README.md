@@ -160,6 +160,8 @@ Please open an issue first to discuss any significant changes.
 
 ---
 
+Found this useful? ⭐ Star the repo to show your support!
+
 ##  License
 
 MIT — see [LICENSE](./LICENSE) for details.
