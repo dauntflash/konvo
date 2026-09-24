@@ -3,12 +3,11 @@ import pb from "./pocketbase";
 export const fetchAllUsers = async ({ signal }: { signal?: AbortSignal } = {}) => {
   try {
     const records = await pb.collection("users").getFullList({
-      $autoCancel: false,  
-      signal, 
+      requestKey: null,
+      signal,
     });
     return records;
   } catch (error) {
-    console.error("Failed to fetch users:", error);
-    throw error;
+    throw error; // let caller decide how to handle isAbort
   }
 };

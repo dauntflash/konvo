@@ -22,36 +22,37 @@ function Search() {
 
     const abortController = new AbortController();
 
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const allUsers = await fetchAllUsers({ signal: abortController.signal });
+const loadData = async () => {
+  setIsLoading(true);
+  try {
+    const allUsers = await fetchAllUsers({ signal: abortController.signal });
 
-        const contactRecords = await pb.collection("contacts").getFullList({
-          filter: `owner = "${user.id}"`,
-          expand: "contact",
-          $autoCancel: false,
-        });
+    const contactRecords = await pb.collection("contacts").getFullList({
+      filter: `owner = "${user.id}"`,
+      expand: "contact",
+      requestKey: null,
+    });
 
-        const contacts = contactRecords
-          .map((rec) => rec.expand?.contact)
-          .filter((contact): contact is RecordModel => !!contact);
-        setAddedUsers(contacts);
+    const contacts = contactRecords
+      .map((rec) => rec.expand?.contact)
+      .filter((contact): contact is RecordModel => !!contact);
+    setAddedUsers(contacts);
 
-        const filteredUsers = allUsers.filter(
-          (u) => u.id !== user.id && !contacts.some((c) => c.id === u.id)
-        );
+    const filteredUsers = allUsers.filter(
+      (u) => u.id !== user.id && !contacts.some((c) => c.id === u.id)
+    );
 
-        setUserList(filteredUsers);
-      } catch (err) {
-        if (!(err instanceof DOMException && err.name === "AbortError")) {
-          console.error("Error loading users or contacts:", err);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
+    setUserList(filteredUsers);
+  } catch (err: any) {
+    if (err?.isAbort) {
+      // request was cancelled (unmount/re-run) — not a real error
+      return;
+    }
+    console.error("Error loading users or contacts:", err);
+  } finally {
+    setIsLoading(false);
+  }
+};
     loadData();
 
     return () => {

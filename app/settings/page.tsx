@@ -20,7 +20,7 @@ function Settings() {
 
   return (
     <section className="size-full">
-      <div className="flex flex-col md:flex-row bg-[rgba(17,25,40,0.95)] h-full w-full rounded-sm backdrop-blur-[19px] saturate-[180%]">
+      <div className="flex flex-col md:flex-row h-full w-full rounded-sm">
         <SettingsBar activeLink={activeLink} setActiveLink={setActiveLink} />
         <div className="size-full overflow-auto md:overflow-hidden">
             {(() => {

@@ -34,45 +34,45 @@ function Page() {
     setIsLoading(false);
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    if (!user?.id) return;
+useEffect(() => {
+  if (!user?.id) return;
 
-    const heartbeat = async (isOnline: boolean) => {
-      try {
-        await pb.collection("users").update(user.id, {
-          is_online: isOnline,
-          last_seen: new Date().toISOString(),
-        });
-      } catch (error) {
-        console.error("Heartbeat failed:", error);
+  let stopped = false;
+
+  const update = async (isOnline: boolean, keepalive = false) => {
+    if (stopped || !pb.authStore.isValid) return;
+    try {
+      await pb.collection("users").update(
+        user.id,
+        { is_online: isOnline, last_seen: new Date().toISOString() },
+        { requestKey: null, keepalive }
+      );
+    } catch (error: any) {
+      if (error?.status === 404 || error?.status === 401 || error?.status === 403) {
+        // user gone or not allowed: stop retrying
+        stopped = true;
+        clearInterval(interval);
       }
-    };
+      console.error("Heartbeat failed:", error);
+    }
+  };
 
-    heartbeat(true);
-    const interval = setInterval(() => heartbeat(true), 25000);
+  update(true);
+  const interval = setInterval(() => update(!document.hidden), 25000);
 
-    const handleVisibility = () => {
-      if (document.hidden) {
-        heartbeat(false);
-      } else {
-        heartbeat(true);
-      }
-    };
+  const handleVisibility = () => update(!document.hidden);
+  const handleUnload = () => update(false, true);
 
-    const handleOffline = () => {
-      pb.collection("users").update(user.id, { is_online: false });
-    };
+  document.addEventListener("visibilitychange", handleVisibility);
+  window.addEventListener("beforeunload", handleUnload);
 
-    document.addEventListener("visibilitychange", handleVisibility);
-    window.addEventListener("beforeunload", handleOffline);
-
-    return () => {
-      clearInterval(interval);
-      document.removeEventListener("visibilitychange", handleVisibility);
-      window.removeEventListener("beforeunload", handleOffline);
-      handleOffline();
-    };
-  }, [user?.id]);
+  return () => {
+    clearInterval(interval);
+    document.removeEventListener("visibilitychange", handleVisibility);
+    window.removeEventListener("beforeunload", handleUnload);
+    update(false);
+  };
+}, [user?.id]);
 
   if (isLoading) {
     return <Loader />;
