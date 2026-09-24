@@ -26,8 +26,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
 
           {/* Show on desktop only */}
-          <div className="hidden md:flex flex-row-reverse size-full min-h-0 overflow-hidden h-screen">
-            <div className="flex-1 min-h-0 overflow-hidden">
+          <div className="hidden md:flex flex-row-reverse size-full overflow-hidden h-screen">
+            <div className="flex-1 overflow-hidden">
               {children}
             </div>
             <div className="flex-shrink-0">
