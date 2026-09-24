@@ -181,8 +181,7 @@ Konvo is desktop-first right now. On a phone the layout isn't ready yet.
 
 - [ ] Mobile layout
 - [ ] Group chats
-- [ ] Reactions on messages
-- [ ] Waveform and playback speed for voice notes
+
 
 ---
 
