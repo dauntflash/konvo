@@ -8,7 +8,7 @@ type props = {
 function Main({ activeUser }: props) {
   const [info, setInfo] = React.useState(false);
   return (
-    <div className="flex-1 flex  dark:bg-[rgba(81,130,254,0.16)] dark:text-gray-700">
+    <div className="flex-1 min-h-0 flex dark:bg-[rgba(81,130,254,0.16)] dark:text-gray-700">
       {activeUser.username ? (
         <>
           <Chat setInfo={setInfo} activeUser={activeUser} />

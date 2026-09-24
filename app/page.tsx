@@ -79,7 +79,7 @@ useEffect(() => {
   }
 
   return (
-    <section className="flex flex-col md:flex-row h-full w-full rounded-sm">
+    <section className="flex flex-col md:flex-row h-full min-h-0 w-full overflow-hidden rounded-sm">
       {isAuthenticated ? (
         user?.hasSeenWelcome ? (
           <>

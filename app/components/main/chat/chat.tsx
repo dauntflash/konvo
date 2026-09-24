@@ -636,7 +636,7 @@ function Chat({ setInfo, activeUser }: Props) {
 
   return (
     <section
-      className="flex-[2] border-[rgba(255,255,255,0.3)] border-r-[1px] flex flex-col h-screen overflow-hidden"
+      className="flex-[2] border-[rgba(255,255,255,0.3)] border-r-[1px] flex flex-col h-full min-h-0 overflow-hidden"
       style={{
         backgroundImage: wallpaperUrl ? `url(${wallpaperUrl})` : "none",
         backgroundSize: "cover",
@@ -649,7 +649,7 @@ function Chat({ setInfo, activeUser }: Props) {
         <Header setInfo={setInfo} activeUser={activeUser} />
       </div>
 
-      <div className="flex-1 overflow-auto messages-container min-h-0">
+      <div className="flex-1 overflow-hidden messages-container min-h-0">
         <Message
           activeUser={activeUser}
           replyingTo={replyingTo || ""}

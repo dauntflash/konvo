@@ -52,6 +52,7 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
   const showProfilePic = user?.showChatsProfilePic;
   const [quoted, setQuoted] = useState<MessageRecord | null>(null);
   const [deleteMsgId, setDeleteMsgId] = useState<string | null>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const fmtSize = (b: number) => {
     const u = ["B", "KB", "MB", "GB"],
@@ -117,7 +118,7 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
     }
   };
 
-  
+
   const shouldShowDateSeparator = (
     currentMessage: MessageRecord,
     previousMessage: MessageRecord | null
@@ -232,7 +233,7 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
         is_online: false,
         last_seen: new Date().toISOString(),
       });
-       
+
     } catch (error) {
       console.error("Failed to update offline status:", error);
     }
@@ -289,7 +290,7 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
       .subscribe("*", async (e) => {
         // When any user comes online, check if they have sent messages that should be marked as delivered
         if (e.action === "update" && e.record.is_online === true) {
-           
+
 
           // Find sent messages from this user to current user
           const sentMessages = await pb.collection("messages").getFullList({
@@ -462,7 +463,10 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
 
         await new Promise((res) => setTimeout(res, 0));
 
-        endRef.current?.scrollIntoView();
+        if (messagesContainerRef.current) {
+          messagesContainerRef.current.scrollTop =
+            messagesContainerRef.current.scrollHeight;
+        }
       } finally {
         setIsLoading(false);
       }
@@ -477,7 +481,10 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
       const isMyLastMessage = lastMsg?.sender === user?.id;
 
       if (isMyLastMessage) {
-        endRef.current?.scrollIntoView({ behavior: "smooth" });
+        messagesContainerRef.current?.scrollTo({
+          top: messagesContainerRef.current.scrollHeight,
+          behavior: "smooth",
+        });
       }
     }
   }, [messages.length, user?.id]);
@@ -534,7 +541,9 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
 
   return (
     <div className="overflow-hidden relative flex flex-col h-full">
-      <div className="flex gap-[10px] flex-col *:text-[.8rem] *:font-medium pr-4 py-3 pt-8 h-full overflow-auto">
+      <div
+        ref={messagesContainerRef}
+        className="flex gap-[10px] flex-col *:text-[.8rem] *:font-medium pr-4 py-3 pt-8 h-full overflow-auto">
         {isLoading ? (
           <Loader size="medium" />
         ) : (
@@ -556,9 +565,9 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
                 ? "Just now"
                 : `${diffMins} minute${diffMins === 1 ? "" : "s"} ago`
               : messageDate.toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                });
+                hour: "2-digit",
+                minute: "2-digit",
+              });
 
           const fileUrl = message.file ? pb.files.getURL(message, message.file) : "";
 
@@ -592,38 +601,32 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
 
                 {message.expand?.replyTo && (
                   <div
-                    className={`flex cursor-pointer flex-col border-[rgba(255,255,255,0.2)] px-3 py-2 my-1 max-w-xs ${
-                      isMyMessage ? "justify-end self-end" : "justify-start"
-                    }`}
+                    className={`flex cursor-pointer flex-col border-[rgba(255,255,255,0.2)] px-3 py-2 my-1 max-w-xs ${isMyMessage ? "justify-end self-end" : "justify-start"
+                      }`}
                     onClick={() => scrollToMessage(message.replyTo!)}>
                     {isMyMessage ? (
                       <span
-                        className={`text-sm font-light my-2 opacity-70 px-3 ${
-                          isMyMessage ? "text-right" : "text-left"
-                        }`}>
-                        {`You replied to ${
-                          message.expand.replyTo.expand?.sender?.username === user?.username
-                            ? "Yourself"
-                            : message.expand.replyTo.expand?.sender?.username ?? "Unknown"
-                        }`}
+                        className={`text-sm font-light my-2 opacity-70 px-3 ${isMyMessage ? "text-right" : "text-left"
+                          }`}>
+                        {`You replied to ${message.expand.replyTo.expand?.sender?.username === user?.username
+                          ? "Yourself"
+                          : message.expand.replyTo.expand?.sender?.username ?? "Unknown"
+                          }`}
                       </span>
                     ) : (
                       <span
-                        className={`text-sm font-light my-2 opacity-70 px-3 ${
-                          isMyMessage ? "text-right" : "text-left"
-                        }`}>
-                        {`Replied to ${
-                          message.expand.replyTo.expand?.sender?.username === user?.username
-                            ? "you"
-                            : "their own message"
-                        }`}
+                        className={`text-sm font-light my-2 opacity-70 px-3 ${isMyMessage ? "text-right" : "text-left"
+                          }`}>
+                        {`Replied to ${message.expand.replyTo.expand?.sender?.username === user?.username
+                          ? "you"
+                          : "their own message"
+                          }`}
                       </span>
                     )}
 
                     <div
-                      className={`p-3 border-[rgba(255,255,255,0.2)] ${
-                        isMyMessage ? "border-r-4 self-end" : "border-l-4"
-                      }`}>
+                      className={`p-3 border-[rgba(255,255,255,0.2)] ${isMyMessage ? "border-r-4 self-end" : "border-l-4"
+                        }`}>
                       <span className="bg-[rgba(255,255,255,0.2)] rounded-3xl p-2 line-clamp-2 break-all">
                         {message.expand?.replyTo?.file
                           ? "📎 " + (message.expand?.replyTo?.text || "Attachment")
@@ -634,18 +637,16 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
                 )}
 
                 <div
-                  className={`flex group items-center  ${
-                    isMyMessage ? "justify-end " : `justify-start  ${showProfilePic ? "" : "pl-5"} `
-                  }  `}>
+                  className={`flex group items-center  ${isMyMessage ? "justify-end " : `justify-start  ${showProfilePic ? "" : "pl-5"} `
+                    }  `}>
                   {!isMyMessage && showProfilePic && (
                     <div className="px-3 self-start">
                       <ChatAvatar avatarUser={activeUser} />
                     </div>
                   )}
                   <div
-                    className={`${
-                      isMyMessage ? "" : "order-1"
-                    } opacity-0 group-hover:opacity-100 items-center justify-center relative *:text-lg *:opacity-70`}>
+                    className={`${isMyMessage ? "" : "order-1"
+                      } opacity-0 group-hover:opacity-100 items-center justify-center relative *:text-lg *:opacity-70`}>
                     {isMyMessage ? (
                       <div className=" absolute right-0 mx-2 flex bottom-[50%] *:cursor-pointer *:mx-1">
                         <span
@@ -654,12 +655,12 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
                             getReplyData(message.id);
                           }}
                           title="Reply"
-                          ></span>
+                        ></span>
                         <span
                           className="bi bi-trash"
                           onClick={() => setDeleteMsgId(message.id)}
                           title="Delete"
-                          ></span>
+                        ></span>
                       </div>
                     ) : (
                       <div className="absolute mx-2 flex flex-row-reverse bottom-[50%] *:cursor-pointer *:mx-1">
@@ -669,22 +670,20 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
                             getReplyData(message.id);
                           }}
                           title="Reply"
-                          
-                          ></span>
+
+                        ></span>
                       </div>
                     )}
                   </div>
                   <div
-                    className={`flex flex-col max-w-[65%] ${
-                      isMyMessage ? "items-end" : "items-start"
-                    }`}>
+                    className={`flex flex-col max-w-[65%] ${isMyMessage ? "items-end" : "items-start"
+                      }`}>
                     {message.file ? (
                       <div
-                        className={`overflow-hidden ${
-                          isMyMessage
-                            ? "bg-[#3c73ff] message-bubble-sent"
-                            : "bg-[#5a5478] message-bubble-received"
-                        }`}>
+                        className={`overflow-hidden ${isMyMessage
+                          ? "bg-[#3c73ff] message-bubble-sent"
+                          : "bg-[#5a5478] message-bubble-received"
+                          }`}>
                         {message.fileType?.startsWith("audio/") ? (
                           <div className="p-3 w-ful">
                             <AudioPlayer url={fileUrl} fileName={message.fileName} />
@@ -773,11 +772,10 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
                       </div>
                     ) : (
                       <div
-                        className={`${
-                          isMyMessage
-                            ? "bg-[#3c73ff] message-bubble-sent"
-                            : "bg-[#5a5478] message-bubble-received"
-                        } px-3 py-2 font-normal text-[.9rem] break-all whitespace-pre-wrap min-w-[100px]`}>
+                        className={`${isMyMessage
+                          ? "bg-[#3c73ff] message-bubble-sent"
+                          : "bg-[#5a5478] message-bubble-received"
+                          } px-3 py-2 font-normal text-[.9rem] break-all whitespace-pre-wrap min-w-[100px]`}>
                         {parseLinks(message.text || "")}
                       </div>
                     )}
@@ -810,7 +808,7 @@ function Message({ activeUser, replyingTo, setReplyingTo }: MessageProps) {
                 )
               }
               title="Download"
-              ></span>
+            ></span>
           </div>
         )}
         {fullVideo && (
