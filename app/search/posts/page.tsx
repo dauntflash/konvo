@@ -438,7 +438,7 @@ function Posts() {
           {postImage && (
             <div className="mt-3">
               <span className="bi bi-x text-[1.5rem] opacity-70 cursor-pointer" onClick={() => { setPostImage(null); setPostImageUrl(""); }} />
-              <Image alt="post preview" width={100} height={100} src={postImageUrl} className="w-auto object-cover max-h-[6rem] min-h-[4rem] rounded-md" />
+              <img alt="post preview" width={100} height={100} src={postImageUrl} className="w-auto object-cover max-h-[6rem] min-h-[4rem] rounded-md" />
             </div>
           )}
         </div>
@@ -513,7 +513,7 @@ function Posts() {
 
             {post.postPic ? (
               <div className="relative">
-                <Image alt="post" width={600} height={600} src={post.postPic} className="w-full object-cover" onClick={() => setFullImage(post)} />
+                <img alt="post" width={600} height={600} src={post.postPic} className="w-full object-cover" onClick={() => setFullImage(post)} />
               </div>
             ) : post.postCaption ? (
               <div className="px-4 py-5 border-y border-[rgba(255,255,255,0.07)]">
